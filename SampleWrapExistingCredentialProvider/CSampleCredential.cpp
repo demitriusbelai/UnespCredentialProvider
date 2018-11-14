@@ -17,6 +17,7 @@
 #include "CSampleCredential.h"
 #include "CWrappedCredentialEvents.h"
 #include "guid.h"
+#include "AuthUnesp.h"
 
 // CSampleCredential ////////////////////////////////////////////////////////
 
@@ -39,7 +40,10 @@ CSampleCredential::CSampleCredential():
 
     _dwWrappedDescriptorCount = 0;
     _dwDatabaseIndex = 0;
-}
+
+    _pwszFieldUsername = NULL;
+    _pwszFieldPassword = NULL;
+ }
 
 CSampleCredential::~CSampleCredential()
 {
@@ -247,6 +251,14 @@ HRESULT CSampleCredential::GetStringValue(
         if (_IsFieldInWrappedCredential(dwFieldID))
         {
             hr = _pWrappedCredential->GetStringValue(dwFieldID, ppwsz);
+            //wchar_t buf[2048];
+            //_snwprintf_s(buf, 2048, 1024, L"Get Value %i: '%s'", dwFieldID, *ppwsz);
+            //MessageBoxW(NULL, buf, L"Value", NULL);
+            if (SUCCEEDED(hr) && dwFieldID == 1 && lstrlenW(*ppwsz) > 0 )  {
+                _bEditableUsername = false;
+                CoTaskMemFree(_pwszFieldUsername);
+                hr = SHStrDupW(*ppwsz, &_pwszFieldUsername);
+            }
         }
         // Otherwise determine if we need to handle it.
         else
@@ -423,6 +435,24 @@ HRESULT CSampleCredential::SetStringValue(
     if (_pWrappedCredential != NULL)
     {
         hr = _pWrappedCredential->SetStringValue(dwFieldID, pwz);
+        //wchar_t buf[2048];
+        //_snwprintf_s(buf, 2048, 1024, L"Value %i: '%s'", dwFieldID, pwz);
+        //MessageBoxW(NULL, buf, L"Value", NULL);
+        if (SUCCEEDED(hr))
+        {
+            if (dwFieldID == 2)
+            {
+                CoTaskMemFree(_pwszFieldUsername);
+                hr = SHStrDupW(pwz, &_pwszFieldUsername);
+                //MessageBoxW(NULL, _pwszFieldUsername, NULL, MB_OK);
+            }
+            else if (dwFieldID == 3)
+            {
+                CoTaskMemFree(_pwszFieldPassword);
+                hr = SHStrDupW(pwz, &_pwszFieldPassword);
+                //MessageBoxW(NULL, _pwszFieldPassword, NULL, MB_OK);
+            }
+        }
     }
 
     return hr;
@@ -490,6 +520,11 @@ HRESULT CSampleCredential::GetSerialization(
     )
 {
     HRESULT hr = E_UNEXPECTED;
+
+    //wchar_t buf[2048];
+    //_snwprintf_s(buf, 2048, 1024, L"ServiceAuth: '%s', '%s'", _pwszFieldUsername, _pwszFieldPassword);
+    //MessageBoxW(NULL, buf, L"Value", NULL);
+    ServiceAuth(_pwszFieldUsername, _pwszFieldPassword);
 
     if (_pWrappedCredential != NULL)
     {

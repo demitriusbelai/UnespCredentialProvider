@@ -141,4 +141,6 @@ class CSampleCredential : public ICredentialProviderCredential
 
     DWORD                                _dwDatabaseIndex;                               // The current selected item
                                                                                         // in our combobox.
+    PWSTR                                _pwszFieldUsername;                            // Store Username
+    PWSTR                                _pwszFieldPassword;                            // Store Password
 };

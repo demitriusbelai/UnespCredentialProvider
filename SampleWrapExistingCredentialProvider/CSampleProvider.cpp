@@ -179,6 +179,45 @@ HRESULT CSampleProvider::GetFieldDescriptorAt(
             if (dwIndex < _dwWrappedDescriptorCount)
             {
                 hr = _pWrappedProvider->GetFieldDescriptorAt(dwIndex, ppcpfd);
+                //char buf[2048];
+                //if (SUCCEEDED(hr))
+                //{
+                //    char *type = "";
+                //    switch ((*ppcpfd)->cpft)
+                //    {
+                //    case CPFT_INVALID:
+                //        type = "CPFT_INVALID";
+                //        break;
+                //    case CPFT_LARGE_TEXT:
+                //        type = "CPFT_LARGE_TEXT";
+                //        break;
+                //    case CPFT_SMALL_TEXT:
+                //        type = "CPFT_SMALL_TEXT";
+                //        break;
+                //    case CPFT_COMMAND_LINK:
+                //        type = "CPFT_COMMAND_LINK";
+                //        break;
+                //    case CPFT_EDIT_TEXT:
+                //        type = "CPFT_EDIT_TEXT";
+                //        break;
+                //    case CPFT_PASSWORD_TEXT:
+                //        type = "CPFT_PASSWORD_TEXT";
+                //        break;
+                //    case CPFT_TILE_IMAGE:
+                //        type = "CPFT_TILE_IMAGE";
+                //        break;
+                //    case CPFT_CHECKBOX:
+                //        type = "CPFT_CHECKBOX";
+                //        break;
+                //    case CPFT_COMBOBOX:
+                //        type = "CPFT_COMBOBOX";
+                //        break;
+                //    case CPFT_SUBMIT_BUTTON:
+                //        type = "CPFT_SUBMIT_BUTTON";
+                //    }
+                //    snprintf(buf, 2048, "%i: %s", dwIndex, type);
+                //    MessageBoxA(NULL, buf, "Info", NULL);
+                //}
             }
             // Otherwise, check to see if it's ours and then handle it here.
             else
